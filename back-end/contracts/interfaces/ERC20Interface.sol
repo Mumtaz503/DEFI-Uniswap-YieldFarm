@@ -2,6 +2,8 @@
 pragma solidity ^0.8.0;
 
 interface ERC20Interface {
+    function deposit() external payable;
+
     function totalSupply() external view returns (uint256);
 
     function balanceOf(address account) external view returns (uint256);
