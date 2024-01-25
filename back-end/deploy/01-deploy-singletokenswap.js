@@ -1,15 +1,19 @@
 const { network, ethers } = require("hardhat");
 const {
+  networkConfig,
   developmentChains,
-  swapRouterAddress,
-  poolFee,
 } = require("../helper-hardhat-config");
 
 module.exports = async function ({ getNamedAccounts, deployments }) {
   const { deployer } = await getNamedAccounts();
   const { deploy, log } = deployments;
+  const chainId = network.config.chainId;
 
-  const constructorArgs = [swapRouterAddress, poolFee];
+  const constructorArgs = [
+    networkConfig[chainId]["swapRouterAddress"],
+    networkConfig[chainId]["poolFee"],
+    networkConfig[chainId]["priceFeedRegistry"],
+  ];
 
   log("-----------------------------------------------------------");
   log("Deploying SingleTokenSwap contract please wait...");

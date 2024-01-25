@@ -24,12 +24,12 @@ const { assert, expect } = require("chai");
         await deployments.fixture(["SingleTokenSwap"]);
         singleTokenSwap = await ethers.getContract("SingleTokenSwap", deployer);
         daiToken = await ethers.getContractAt(
-          "ERC20Interface",
+          "IErc20",
           "0x6B175474E89094C44Da98b954EedeAC495271d0F",
           signer
         );
         wethToken = await ethers.getContractAt(
-          "ERC20Interface",
+          "IErc20",
           "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
           signer
         );
@@ -90,12 +90,12 @@ const { assert, expect } = require("chai");
         });
 
         it("Should swap specified incoming tokens for outgoing tokens", async function () {
-          const tokenIn = wethToken.target;
-          const tokenOut = daiToken.target;
+          const tokenOut = wethToken.target;
+          const tokenIn = daiToken.target;
           const amountWethToSend = ethers.parseEther("10");
-          const deployerDaiBalance = await daiToken.balanceOf(deployer);
+          const deployerWethBalance = await wethToken.balanceOf(deployer);
 
-          await wethToken.approve(singleTokenSwap.target, amountWethToSend);
+          await daiToken.approve(singleTokenSwap.target, amountWethToSend);
           const tx = await singleTokenSwap.swapExactInputSingle(
             amountWethToSend,
             tokenIn,
@@ -103,8 +103,17 @@ const { assert, expect } = require("chai");
           );
           await tx.wait(1);
 
-          const deployerDaiBalanaceAfter = await daiToken.balanceOf(deployer);
-          assert(deployerDaiBalanaceAfter > deployerDaiBalance);
+          const deployerWethBalanaceAfter = await wethToken.balanceOf(deployer);
+          assert(deployerWethBalanaceAfter > deployerWethBalance);
+        });
+        // Remaining tests
+      });
+      describe("isValidErc20 function", () => {
+        it("is valid erc20", async function () {
+          const isValidErc20 = await singleTokenSwap.isValidErc20(
+            daiToken.target
+          );
+          expect(isValidErc20).to.be.true;
         });
       });
     });
