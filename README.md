@@ -1,6 +1,6 @@
 # DEFI-Uniswap-YieldFarm
 
-The following is a "portfolio" project for a DEFI application with following functionality:
+The following is a "portfolio" project for an Automated Portfolio rebalancer application with following functionality:
 
   1. [ ] Swaps implemented from Uniswap-v3.
   2. [ ] Liquidity Pool creation with custom logic. 
